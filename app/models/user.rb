@@ -4,6 +4,8 @@
 #
 #  id              :integer          not null, primary key
 #  comments_count  :integer
+#  email           :string
+#  is_private      :boolean
 #  likes_count     :integer
 #  password_digest :string
 #  private         :boolean
@@ -90,5 +92,9 @@ class User < ApplicationRecord
     array_of_discover_photo_ids = all_leader_likes.pluck(:photo_id)
 
     return Photo.where({ :id => array_of_discover_photo_ids })
+  end
+  
+  def pending_follow_requests
+    return self.received_follow_requests.where.not({ :status => "accepted" })
   end
 end

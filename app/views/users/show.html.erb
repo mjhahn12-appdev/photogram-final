@@ -1,0 +1,107 @@
+<h1><%= @user.username %></h1>
+
+<dl>
+  <dt>Private</dt>
+  <dd><%= @user.private %></dd>
+
+  <dt>Followers</dt>
+  <dd><%= @user.followers.count %></dd>
+
+  <dt>Pending Follow Requests</dt>
+  <% if %>
+    <% @user.pending_follow_requests.each do |request| %>
+      <li>
+        <%= User.where({:id => request.sender.id})[0].username %>
+        <form action="/acceptfollow">
+          <input id="browser_acceptfollow" type="button" name="input_acceptfollow" value="Accept">
+        <form action="/rejectfollow">
+          <input id="browser_rejectfollow" type="button" name="input_rejectfollow" value="Reject">
+      </li>
+    <% end %>
+  <% end %>
+
+  <dt>Following</dt>
+  <dd><%= @user.following.count %></dd>
+
+  <dt>Edit user</dt>
+  <dd>
+    <form action="/update_user/<%= @user.id %>" >
+      <label for="browser_username">Username</label>
+      <input id="browser_username" type="text" name="input_username" placeholder="Enter a username..." value="<%= @user.username %>">
+      
+      <label for="browser_privacy">Private</label>
+      <input id="browser_privacy" type="checkbox" name="input_privacy" value="<%= @user.private %>">
+
+      <button>Update user</button>
+    </form>
+  </dd>
+</dl>
+
+<ul>
+  <li>
+    <a href="/users/<%= @user.username %>">Profile</a>
+  </li>
+
+  <li>
+    <a href="/users/<%= @user.username %>/liked_photos">Liked Photos</a>
+  </li>
+
+  <li>
+    <a href="/users/<%= @user.username %>/feed">Feed</a>
+  </li>  
+
+  <li>
+    <a href="/users/<%= @user.username %>/discover">Discover</a>
+  </li>
+</ul>
+
+<h2>Own photos (<%= @user.own_photos.count %>)</h2>
+
+<table border="1">
+  <tr>
+    <th>
+      Image
+    </th>
+
+    <th>
+      Owner
+    </th>
+
+    <th>
+      Caption
+    </th>
+
+    <th>
+      Posted
+    </th>
+
+    <th></th>
+  </tr>
+
+  <% @user.own_photos.each do |photo| %>
+  <tr>
+    <td>
+      <img src="<%= photo.image %>">
+    </td>
+
+    <td>
+      <%= photo.poster.username %>
+    </td>
+
+    <td>
+      <%= photo.caption %>
+    </td>
+
+    <td>
+      <%= time_ago_in_words(photo.created_at) %>
+    </td>
+    
+    <td>
+      <a href="/photos/<%= photo.id %>">
+        Show details
+      </a>
+    </td>
+  </tr>
+
+  <% end %>
+</table>

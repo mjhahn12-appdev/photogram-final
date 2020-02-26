@@ -5,24 +5,23 @@
 <table border="1">
   <tr>
     <th>
-      ID
-    </th>
-
-    <th>
       Username
     </th>
-
+    <th>
+      Private?
+    </th>
     <th></th>
   </tr>
 
   <% @users.each do |user| %>
   <tr>
-    <td>
-      <%= user.id %>
-    </td>
 
     <td>
       <%= user.username %>
+    </td>
+
+    <td>
+      <%= user.is_private %>
     </td>
 
     <td>

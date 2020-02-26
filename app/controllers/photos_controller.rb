@@ -1,7 +1,7 @@
 class PhotosController < ApplicationController
   def index
     @photos = Photo.all
-    render({ :template => "layouts/photos/all_photos.html.erb"})
+    render({ :template => "photos/all_photos.html.erb"})
   end
 
   def create
@@ -17,9 +17,13 @@ class PhotosController < ApplicationController
   end
 
   def show
+    if (session[:current_user_id] == nil)
+      redirect_to("/user_sign_in")
+      return
+    end
     p_id = params.fetch("the_photo_id")
     @photo = Photo.where({:id => p_id }).first
-    render({:template => "layouts/photos/details.html.erb"})
+    render({:template => "photos/details.html.erb"})
   end
 
   def destroy
@@ -39,4 +43,21 @@ class PhotosController < ApplicationController
 
     redirect_to("/photos/#{photo.id}")
   end
+
+  def addlike
+    like = Like.new
+    like.fan_id = session[:current_user_id]
+    like.photo_id = params["query_photo_id"].to_i
+    like.save
+
+    redirect_to("/photos/#{like.photo_id}")
+  end
+
+  def deletelike
+    like = Like.where({ :id => params["like_id"]}).at(0)
+    like.destroy
+
+    redirect_to("/photos/#{like.photo_id}")
+  end
+
 end

@@ -14,6 +14,9 @@ Rails.application.routes.draw do
   # READ
   get("/users", {:controller => "users", :action => "index"})
   get("/users/:the_username", {:controller => "users", :action => "show"})
+  get("/users/:the_username/feed", {:controller => "users", :action => "feed"})
+  get("/users/:the_username/liked_photos", {:controller => "users", :action => "likedphotos"})
+  get("/users/:the_username/discover", {:controller => "users", :action => "discover"})
 
   # UPDATE
   get("/update_user/:the_user_id", {:controller => "users", :action => "update" })
@@ -33,6 +36,8 @@ Rails.application.routes.draw do
 
   # UPDATE
   get("/update_photo/:the_photo_id", { :controller => "photos", :action => "update" })
+  get("/insert_like", {:controller=> "photos", :action=> "addlike"})
+  get("/delete_like/:like_id", {:controller=> "photos", :action=> "deletelike"})
 
   # DELETE
   get("/delete_photo/:the_photo_id", { :controller => "photos", :action => "destroy"})
